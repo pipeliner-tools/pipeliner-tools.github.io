@@ -3,195 +3,286 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pipeliner Tools | Engineering Suite</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>Pipeline Engineering Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* Corporate Blue and Orange Palette */
-            --primary-blue: #005b9f; 
-            --accent-orange: #ff7900;
-            --bg-color: #f8fafc;
-            --text-main: #334155;
-            --text-light: #64748b;
-            --card-bg: #ffffff;
+            --bg-base: #070F15; /* Deep, dark navy */
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --text-primary: #F8FAFC;
+            --text-secondary: #94A3B8;
+            --accent-teal: #00A5A8; 
+            --accent-orange: #F37021;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Inter', sans-serif;
+            font-family: 'Plus Jakarta Sans', sans-serif;
         }
 
         body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
+            background-color: var(--bg-base);
+            color: var(--text-primary);
             line-height: 1.6;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
         }
 
-        /* Hero Section */
-        .hero {
-            background-color: var(--primary-blue);
-            color: white;
+        /* Ambient Background Glows */
+        .ambient-glow {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(120px);
+            z-index: -1;
+            opacity: 0.4;
+            pointer-events: none;
+        }
+
+        .glow-1 {
+            top: -10%;
+            left: -10%;
+            width: 50vw;
+            height: 50vw;
+            background: radial-gradient(circle, rgba(0,165,168,0.2) 0%, rgba(7,15,21,0) 70%);
+        }
+
+        .glow-2 {
+            bottom: 0;
+            right: -10%;
+            width: 40vw;
+            height: 40vw;
+            background: radial-gradient(circle, rgba(243,112,33,0.15) 0%, rgba(7,15,21,0) 70%);
+        }
+
+        /* Layout */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
             padding: 6rem 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Typography & Header */
+        header {
+            margin-bottom: 5rem;
             text-align: center;
-            border-bottom: 6px solid var(--accent-orange);
         }
 
-        .hero h1 {
-            font-size: 2.5rem;
-            font-weight: 700;
+        .tagline {
+            color: var(--accent-orange);
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
             margin-bottom: 1rem;
-            letter-spacing: -0.5px;
+            display: block;
         }
 
-        .hero p {
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            letter-spacing: -1px;
+            margin-bottom: 1.25rem;
+            background: linear-gradient(135deg, #FFF 0%, #94A3B8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        header p {
+            color: var(--text-secondary);
             font-size: 1.125rem;
-            color: #e2e8f0;
             max-width: 600px;
             margin: 0 auto;
-            font-weight: 400;
+            font-weight: 300;
         }
 
-        /* Grid Layout */
-        .container {
-            max-width: 1200px;
-            margin: -3rem auto 4rem auto; /* Overlaps the hero slightly */
-            padding: 0 2rem;
-        }
-
+        /* Grid */
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
         }
 
-        /* Tool Cards */
+        /* Glassmorphism Cards */
         .card {
-            background-color: var(--card-bg);
-            border-radius: 8px;
-            padding: 2rem;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 2.5rem 2rem;
             text-decoration: none;
-            color: var(--text-main);
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
-            border-top: 4px solid transparent;
+            color: var(--text-primary);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
             display: flex;
             flex-direction: column;
         }
 
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-            border-top: 4px solid var(--accent-orange);
+        /* Subtle top border gradient on hover */
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent-teal), var(--accent-orange));
+            opacity: 0;
+            transition: opacity 0.4s ease;
         }
 
-        .card-icon {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
+        .card:hover {
+            transform: translateY(-8px);
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5);
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        /* Card Content */
+        .icon-wrapper {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: rgba(0, 165, 168, 0.1);
+            color: var(--accent-teal);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: background 0.4s ease, color 0.4s ease;
+        }
+
+        .card:hover .icon-wrapper {
+            background: var(--accent-orange);
+            color: #fff;
         }
 
         .card h2 {
             font-size: 1.25rem;
             font-weight: 600;
             margin-bottom: 0.75rem;
-            color: var(--primary-blue);
+            letter-spacing: -0.5px;
         }
 
         .card p {
-            color: var(--text-light);
+            color: var(--text-secondary);
             font-size: 0.95rem;
+            font-weight: 300;
+            line-height: 1.5;
             flex-grow: 1;
+            margin-bottom: 2rem;
         }
 
-        .card-footer {
-            margin-top: 1.5rem;
-            font-size: 0.875rem;
-            font-weight: 600;
-            color: var(--accent-orange);
-            display: flex;
+        /* Hover Arrow */
+        .arrow {
+            display: inline-flex;
             align-items: center;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-top: auto;
         }
 
-        .card-footer::after {
-            content: '→';
-            margin-left: 0.5rem;
-            transition: margin-left 0.2s ease;
+        .arrow svg {
+            margin-left: 8px;
+            width: 16px;
+            height: 16px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            transition: transform 0.3s ease;
         }
 
-        .card:hover .card-footer::after {
-            margin-left: 0.75rem;
-        }
-
-        /* Footer */
-        footer {
-            text-align: center;
-            padding: 2rem;
-            color: var(--text-light);
-            font-size: 0.9rem;
+        .card:hover .arrow svg {
+            transform: translateX(6px);
+            color: var(--accent-orange);
         }
 
         @media (max-width: 768px) {
-            .hero {
-                padding: 4rem 1rem 5rem 1rem;
+            h1 {
+                font-size: 2.5rem;
             }
             .container {
-                margin-top: -2rem;
+                padding: 4rem 1.5rem;
             }
         }
     </style>
 </head>
 <body>
 
-    <header class="hero">
-        <h1>Pipeliner Tools</h1>
-        <p>A suite of static calculation and assessment tools built on 15+ years of natural gas pipeline maintenance and operations experience.</p>
-    </header>
+    <div class="ambient-glow glow-1"></div>
+    <div class="ambient-glow glow-2"></div>
 
     <main class="container">
+        <header>
+            <span class="tagline">Engineering Tools</span>
+            <h1>Pipeline Integrity Suite</h1>
+            <p>Static HTML calculation tools built on over 15 years of operational natural gas pipeline maintenance experience.</p>
+        </header>
+
         <div class="grid">
             
             <a href="https://pipeliner-tools.github.io/metal_loss_assessment/" class="card">
-                <div class="card-icon">🔍</div>
+                <div class="icon-wrapper">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                </div>
                 <h2>Metal Loss Assessment</h2>
-                <p>Calculate and evaluate pipeline integrity based on metal loss data to ensure safe operating limits.</p>
-                <div class="card-footer">Launch Tool</div>
+                <p>Evaluate pipeline integrity and calculate safe operating limits based on precision metal loss data.</p>
+                <div class="arrow">Access Tool <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
             </a>
 
             <a href="https://pipeliner-tools.github.io/design-calc/" class="card">
-                <div class="card-icon">📐</div>
+                <div class="icon-wrapper">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l10 6.5v7L12 22 2 15.5v-7L12 2z"></path><path d="M12 22v-6.5"></path><path d="M22 8.5l-10 7-10-7"></path><path d="M2 15.5l10-7 10 7"></path></svg>
+                </div>
                 <h2>Design Calculator</h2>
-                <p>Determine pipeline wall thickness, design pressure, and engineering specifications according to standard codes.</p>
-                <div class="card-footer">Launch Tool</div>
+                <p>Determine engineering specifications, wall thickness, and design pressures following standard industry codes.</p>
+                <div class="arrow">Access Tool <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
             </a>
 
             <a href="https://pipeliner-tools.github.io/ng-hydraulics/" class="card">
-                <div class="card-icon">💨</div>
+                <div class="icon-wrapper">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h4l3-9 5 18 3-9h5"></path></svg>
+                </div>
                 <h2>NG Hydraulics</h2>
-                <p>Perform gas flow calculations, pressure drop analysis, and optimize throughput for natural gas networks.</p>
-                <div class="card-footer">Launch Tool</div>
+                <p>Analyze gas flow, compute pressure drops, and optimize throughput across pipeline networks.</p>
+                <div class="arrow">Access Tool <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
             </a>
 
             <a href="https://pipeliner-tools.github.io/pig-track/" class="card">
-                <div class="card-icon">📍</div>
+                <div class="icon-wrapper">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                </div>
                 <h2>Pig Tracking</h2>
-                <p>Estimate arrival times and track the progress of pipeline inspection gauges during operational runs.</p>
-                <div class="card-footer">Launch Tool</div>
+                <p>Track the progress of pipeline inspection gauges and accurately estimate arrival times during operational runs.</p>
+                <div class="arrow">Access Tool <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
             </a>
 
             <a href="https://pipeliner-tools.github.io/pig-sizing/" class="card">
-                <div class="card-icon">📏</div>
+                <div class="icon-wrapper">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>
+                </div>
                 <h2>Pig Sizing</h2>
-                <p>Calculate the appropriate dimensions and configuration for pipeline pigs to ensure effective cleaning and inspection.</p>
-                <div class="card-footer">Launch Tool</div>
+                <p>Calculate optimal dimensions for cleaning and inspection pigs to ensure effective network runs.</p>
+                <div class="arrow">Access Tool <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
             </a>
 
         </div>
     </main>
-
-    <footer>
-        <p>&copy; 2026 Pipeliner Tools. Open-source utilities for pipeline engineers.</p>
-    </footer>
 
 </body>
 </html>
