@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pipeline Engineering Portfolio</title>
+    <title>Pipelineer Tools</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -23,19 +23,21 @@
             font-family: 'Plus Jakarta Sans', sans-serif;
         }
 
+        /* Prevents horizontal scrolling from the glowing orbs */
         html, body {
-          max-width: 100%;
-          overflow-x: hidden;
+            max-width: 100%;
+            overflow-x: hidden;
         }
 
         body {
-          background-color: var(--bg-base);
-          color: var(--text-primary);
-          line-height: 1.6;
-          min-height: 100vh;
-          position: relative;
+            background-color: var(--bg-base);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            position: relative;
+            display: flex;
+            flex-direction: column;
         }
-
 
         /* Ambient Background Glows */
         .ambient-glow {
@@ -67,35 +69,48 @@
         .container {
             max-width: 1100px;
             margin: 0 auto;
-            padding: 6rem 2rem;
+            padding: 2rem 2rem 6rem 2rem; /* Reduced top padding to pull header up */
             position: relative;
             z-index: 1;
+            flex-grow: 1;
         }
 
         /* Typography & Header */
         header {
-            margin-bottom: 5rem;
+            margin-bottom: 4rem;
             text-align: center;
+            position: relative;
+            z-index: 1;
         }
 
-        .tagline {
-            color: var(--accent-orange);
-            font-size: 0.875rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 1rem;
-            display: block;
-        }
-
-        h1 {
+        header h1 {
             font-size: 3.5rem;
-            font-weight: 700;
+            font-weight: 800;
             letter-spacing: -1px;
-            margin-bottom: 1.25rem;
-            background: linear-gradient(135deg, #FFF 0%, #94A3B8 100%);
+            margin-bottom: 0.75rem;
+            
+            /* Slow, subtle animated sweep gradient */
+            background: linear-gradient(
+                to right, 
+                var(--text-primary) 20%, 
+                var(--accent-teal) 50%, 
+                var(--accent-orange) 80%, 
+                var(--text-primary) 100%
+            );
+            background-size: 400% auto;
+            color: #000;
+            background-clip: text;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            text-shadow: 0 10px 30px rgba(0, 165, 168, 0.1);
+            
+            animation: textSweep 12s linear infinite;
+        }
+
+        @keyframes textSweep {
+            to {
+                background-position: 400% center;
+            }
         }
 
         header p {
@@ -103,7 +118,7 @@
             font-size: 1.125rem;
             max-width: 600px;
             margin: 0 auto;
-            font-weight: 300;
+            font-weight: 400;
         }
 
         /* Grid */
@@ -130,7 +145,6 @@
             flex-direction: column;
         }
 
-        /* Subtle top border gradient on hover */
         .card::before {
             content: '';
             position: absolute;
@@ -217,13 +231,23 @@
             color: var(--accent-orange);
         }
 
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            font-weight: 300;
+            border-top: 1px solid var(--card-border);
+            background: rgba(7, 15, 21, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 10;
+        }
+
         @media (max-width: 768px) {
-            h1 {
-                font-size: 2.5rem;
-            }
-            .container {
-                padding: 4rem 1.5rem;
-            }
+            header { margin-bottom: 3rem; }
+            header h1 { font-size: 2.5rem; }
+            .container { padding: 2rem 1.5rem 4rem 1.5rem; }
         }
     </style>
 </head>
@@ -234,9 +258,8 @@
 
     <main class="container">
         <header>
-            <span class="tagline">Engineering Tools</span>
-            <h1>Pipeline Integrity Suite</h1>
-            <p>Static HTML calculation tools built on over 15 years of operational natural gas pipeline maintenance experience.</p>
+            <h1>Pipelineer Tools</h1>
+            <p>Built by a Pipeliner for fellow Pipeliners</p>
         </header>
 
         <div class="grid">
@@ -246,7 +269,7 @@
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
                 </div>
                 <h2>Metal Loss Assessment</h2>
-                <p>Evaluate pipeline integrity and calculate safe operating limits based on precision metal loss data.</p>
+                <p>Evaluate remaining pipeline strength using ASME B31G, RSTRENG (Effective Area with River Bottom Profiling), Kastner, and NG-18 methodologies. Features batch Excel uploads and Safe Length vs. Depth acceptance curves.</p>
                 <div class="arrow">Access Tool <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
             </a>
 
@@ -255,7 +278,7 @@
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l10 6.5v7L12 22 2 15.5v-7L12 2z"></path><path d="M12 22v-6.5"></path><path d="M22 8.5l-10 7-10-7"></path><path d="M2 15.5l10-7 10 7"></path></svg>
                 </div>
                 <h2>Design Calculator</h2>
-                <p>Determine engineering specifications, wall thickness, and design pressures following standard industry codes.</p>
+                <p>Compute required wall thickness and maximum internal design pressure per ASME B31.8 and API 5L. Automatically compares Location Class factors (1-4) and selects the next standard wall thickness.</p>
                 <div class="arrow">Access Tool <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
             </a>
 
@@ -264,7 +287,7 @@
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h4l3-9 5 18 3-9h5"></path></svg>
                 </div>
                 <h2>NG Hydraulics</h2>
-                <p>Analyze gas flow, compute pressure drops, and optimize throughput across pipeline networks.</p>
+                <p>Perform natural gas flow calculations utilizing the AGA Fully Turbulent Flow equation and CNGA compressibility. Solve for network capacity, downstream pressure drops, or required pipe diameters while tracking erosional velocity limits.</p>
                 <div class="arrow">Access Tool <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
             </a>
 
@@ -273,21 +296,30 @@
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
                 </div>
                 <h2>Pig Tracking</h2>
-                <p>Track the progress of pipeline inspection gauges and accurately estimate arrival times during operational runs.</p>
+                <p>Estimate theoretical transit times for gas or liquid runs, and dynamically project downstream SV station arrival times based on live, field-confirmed waypoint data.</p>
                 <div class="arrow">Access Tool <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
             </a>
 
-            <a href="https://pipeliner-tools.github.io/pig-sizing/" class="card">
+                        <a href="https://pipeliner-tools.github.io/pig-sizing/" class="card">
                 <div class="icon-wrapper">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="9"></circle>
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <polyline points="7 8 3 12 7 16"></polyline>
+                        <polyline points="17 8 21 12 17 16"></polyline>
+                    </svg>
                 </div>
                 <h2>Pig Sizing</h2>
-                <p>Calculate optimal dimensions for cleaning and inspection pigs to ensure effective network runs.</p>
+                <p>Determine exact dimensional tolerances for cleaning pigs, seal discs, gauge plates, and guide discs utilizing internal diameter minimum/maximum variances to prevent stuck tool incidents.</p>
                 <div class="arrow">Access Tool <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
             </a>
 
         </div>
     </main>
+
+    <footer>
+        <p>Developed by Ramakrishna Mullapudi. Open-source utilities for pipeline engineers.</p>
+    </footer>
 
 </body>
 </html>
