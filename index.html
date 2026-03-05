@@ -6,14 +6,35 @@
     <title>Pipeliner Tools</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        /* --- THEME VARIABLES --- */
         :root {
-            --bg-base: #070F15; /* Deep, dark navy */
+            /* Dark Theme (Default) */
+            --bg-base: #070F15;
             --card-bg: rgba(255, 255, 255, 0.03);
             --card-border: rgba(255, 255, 255, 0.08);
             --text-primary: #F8FAFC;
             --text-secondary: #94A3B8;
             --accent-teal: #00A5A8; 
             --accent-orange: #F37021;
+            --glow-1: rgba(0, 165, 168, 0.2);
+            --glow-2: rgba(243, 112, 33, 0.15);
+            --grad-base: #FFFFFF;
+            --footer-bg: rgba(7, 15, 21, 0.8);
+        }
+
+        [data-theme="light"] {
+            /* Light Theme */
+            --bg-base: #F8FAFC;
+            --card-bg: rgba(255, 255, 255, 0.6);
+            --card-border: rgba(0, 0, 0, 0.08);
+            --text-primary: #0F172A;
+            --text-secondary: #475569;
+            --accent-teal: #008082; 
+            --accent-orange: #E05D0F; 
+            --glow-1: rgba(0, 165, 168, 0.15);
+            --glow-2: rgba(243, 112, 33, 0.1);
+            --grad-base: #0F172A;
+            --footer-bg: rgba(248, 250, 252, 0.8);
         }
 
         * {
@@ -23,7 +44,7 @@
             font-family: 'Plus Jakarta Sans', sans-serif;
         }
 
-        /* Prevents horizontal scrolling from the glowing orbs */
+        /* Prevents horizontal scrolling */
         html, body {
             max-width: 100%;
             overflow-x: hidden;
@@ -37,7 +58,53 @@
             position: relative;
             display: flex;
             flex-direction: column;
+            transition: background-color 0.5s ease, color 0.5s ease;
         }
+
+        /* Theme Toggle Button */
+        .theme-toggle-wrapper {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            z-index: 100;
+        }
+
+        .theme-toggle {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            color: var(--text-primary);
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+            border-color: var(--accent-teal);
+            color: var(--accent-teal);
+        }
+
+        .theme-toggle svg {
+            width: 20px;
+            height: 20px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: absolute;
+        }
+
+        /* Icon Animation States */
+        .sun-icon { opacity: 0; transform: rotate(-90deg) scale(0.5); }
+        .moon-icon { opacity: 1; transform: rotate(0) scale(1); }
+
+        [data-theme="light"] .sun-icon { opacity: 1; transform: rotate(0) scale(1); }
+        [data-theme="light"] .moon-icon { opacity: 0; transform: rotate(90deg) scale(0.5); }
 
         /* Ambient Background Glows */
         .ambient-glow {
@@ -45,8 +112,8 @@
             border-radius: 50%;
             filter: blur(120px);
             z-index: -1;
-            opacity: 0.4;
             pointer-events: none;
+            transition: background 0.5s ease;
         }
 
         .glow-1 {
@@ -54,7 +121,7 @@
             left: -10%;
             width: 50vw;
             height: 50vw;
-            background: radial-gradient(circle, rgba(0,165,168,0.2) 0%, rgba(7,15,21,0) 70%);
+            background: radial-gradient(circle, var(--glow-1) 0%, transparent 70%);
         }
 
         .glow-2 {
@@ -62,14 +129,14 @@
             right: -10%;
             width: 40vw;
             height: 40vw;
-            background: radial-gradient(circle, rgba(243,112,33,0.15) 0%, rgba(7,15,21,0) 70%);
+            background: radial-gradient(circle, var(--glow-2) 0%, transparent 70%);
         }
 
         /* Layout */
         .container {
             max-width: 1100px;
             margin: 0 auto;
-            padding: 2rem 2rem 6rem 2rem; /* Reduced top padding to pull header up */
+            padding: 2rem 2rem 6rem 2rem;
             position: relative;
             z-index: 1;
             flex-grow: 1;
@@ -89,16 +156,15 @@
             letter-spacing: -1px;
             margin-bottom: 0.75rem;
             
-            /* Slow, subtle animated sweep gradient */
             background: linear-gradient(
                 to right, 
-                var(--text-primary) 20%, 
+                var(--grad-base) 20%, 
                 var(--accent-teal) 50%, 
                 var(--accent-orange) 80%, 
-                var(--text-primary) 100%
+                var(--grad-base) 100%
             );
             background-size: 400% auto;
-            color: #000;
+            color: transparent;
             background-clip: text;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -108,9 +174,7 @@
         }
 
         @keyframes textSweep {
-            to {
-                background-position: 400% center;
-            }
+            to { background-position: 400% center; }
         }
 
         header p {
@@ -119,6 +183,7 @@
             max-width: 600px;
             margin: 0 auto;
             font-weight: 400;
+            transition: color 0.5s ease;
         }
 
         /* Grid */
@@ -159,6 +224,11 @@
 
         .card:hover {
             transform: translateY(-8px);
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.15);
+            border-color: rgba(0, 165, 168, 0.3);
+        }
+
+        [data-theme="dark"] .card:hover {
             background: rgba(255, 255, 255, 0.05);
             border-color: rgba(255, 255, 255, 0.15);
             box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5);
@@ -193,6 +263,7 @@
             font-weight: 600;
             margin-bottom: 0.75rem;
             letter-spacing: -0.5px;
+            transition: color 0.5s ease;
         }
 
         .card p {
@@ -202,6 +273,7 @@
             line-height: 1.5;
             flex-grow: 1;
             margin-bottom: 2rem;
+            transition: color 0.5s ease;
         }
 
         /* Hover Arrow */
@@ -212,6 +284,7 @@
             font-weight: 500;
             color: var(--text-primary);
             margin-top: auto;
+            transition: color 0.5s ease;
         }
 
         .arrow svg {
@@ -231,27 +304,120 @@
             color: var(--accent-orange);
         }
 
-        /* Footer */
+        /* --- SINGLE PHRASE SCROLLING FOOTER --- */
         footer {
-            text-align: center;
-            padding: 2rem;
-            color: var(--text-secondary);
-            font-size: 0.875rem;
-            font-weight: 300;
-            border-top: 1px solid var(--card-border);
-            background: rgba(7, 15, 21, 0.8);
+            padding: 1.5rem 2rem;
+            background: var(--footer-bg);
             backdrop-filter: blur(10px);
             z-index: 10;
+            position: relative;
+            border-top: 1px solid var(--card-border);
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+            transition: background-color 0.5s ease, border-color 0.5s ease;
+        }
+
+        /* The Animated Energy Pulse Line */
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%; width: 100%; height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent-teal), var(--accent-orange), transparent);
+            animation: footerPulse 6s linear infinite;
+        }
+
+        @keyframes footerPulse {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        /* Scrolling Text Container */
+        .scrolling-wrapper {
+            flex-grow: 1;
+            overflow: hidden;
+            white-space: nowrap;
+            position: relative;
+            /* Soft fade on the left and right edges */
+            mask-image: linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%);
+            -webkit-mask-image: linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%);
+        }
+
+        .scrolling-content {
+            display: inline-block;
+            /* 25 seconds makes it slow, smooth, and easy to read */
+            animation: tickerScroll 25s linear infinite;
+        }
+
+        .scrolling-wrapper:hover .scrolling-content {
+            animation-play-state: paused;
+        }
+
+        /* The text string itself with the gradient sweep */
+        .scrolling-content span {
+            display: inline-flex;
+            /* 100vw padding ensures only ONE instance is ever visible on screen at once */
+            padding-right: 100vw; 
+            font-size: 0.95rem;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            
+            /* Animated color sweep for the footer text */
+            background: linear-gradient(
+                to right, 
+                var(--text-primary) 20%, 
+                var(--accent-teal) 50%, 
+                var(--accent-orange) 80%, 
+                var(--text-primary) 100%
+            );
+            background-size: 300% auto;
+            color: transparent;
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: footerTextSweep 8s linear infinite;
+        }
+
+        @keyframes footerTextSweep {
+            to { background-position: 300% center; }
+        }
+
+        @keyframes tickerScroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
         }
 
         @media (max-width: 768px) {
-            header { margin-bottom: 3rem; }
+            .theme-toggle-wrapper { top: 1rem; right: 1rem; }
+            header { margin-bottom: 3rem; margin-top: 1rem; }
             header h1 { font-size: 2.5rem; }
             .container { padding: 2rem 1.5rem 4rem 1.5rem; }
+            footer { padding: 1.5rem 1rem; }
+            /* Slightly more padding on mobile to keep the spacing wide */
+            .scrolling-content span { font-size: 0.85rem; padding-right: 150vw; } 
         }
     </style>
 </head>
 <body>
+
+    <div class="theme-toggle-wrapper">
+        <button id="themeToggle" class="theme-toggle" aria-label="Toggle Theme">
+            <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5"></circle>
+                <line x1="12" y1="1" x2="12" y2="3"></line>
+                <line x1="12" y1="21" x2="12" y2="23"></line>
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                <line x1="1" y1="12" x2="3" y2="12"></line>
+                <line x1="21" y1="12" x2="23" y2="12"></line>
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+            <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+        </button>
+    </div>
 
     <div class="ambient-glow glow-1"></div>
     <div class="ambient-glow glow-2"></div>
@@ -300,7 +466,7 @@
                 <div class="arrow">Access Tool <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
             </a>
 
-                        <a href="https://pipeliner-tools.github.io/pig-sizing/" class="card">
+            <a href="https://pipeliner-tools.github.io/pig-sizing/" class="card">
                 <div class="icon-wrapper">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="12" cy="12" r="9"></circle>
@@ -318,8 +484,35 @@
     </main>
 
     <footer>
-        <p>Developed by Ramakrishna Mullapudi. Open-source utilities for pipeline engineers.</p>
+        <div class="scrolling-wrapper">
+            <div class="scrolling-content">
+                <span>Designed & Developed by Ramakrishna Mullapudi &copy; 2026</span>
+                <span aria-hidden="true">Designed & Developed by Ramakrishna Mullapudi &copy; 2026</span>
+            </div>
+        </div>
     </footer>
 
+    <script>
+        const themeToggleBtn = document.getElementById('themeToggle');
+        const htmlElement = document.documentElement;
+
+        // Check local storage or system preference on load
+        const savedTheme = localStorage.getItem('pipelineer-theme');
+        const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+        // Apply saved theme, or fallback to system preference (default dark)
+        if (savedTheme === 'light' || (!savedTheme && !systemPrefersDark)) {
+            htmlElement.setAttribute('data-theme', 'light');
+        }
+
+        // Toggle theme on button click
+        themeToggleBtn.addEventListener('click', () => {
+            const currentTheme = htmlElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            
+            htmlElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('pipelineer-theme', newTheme);
+        });
+    </script>
 </body>
 </html>
